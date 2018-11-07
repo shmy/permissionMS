@@ -1,0 +1,35 @@
+@import "./help.scss";
+@import "./tree.scss";
+@import "./theme/index.scss";
+@import "./transition/index.scss";
+.el-pagination {
+  text-align: right;
+}
+
+// 全屏弹出框固定顶部和底部中间滚动
+.el-dialog-container {
+  display: flex;
+  flex-direction: column;
+  width: 600px;
+  height: 70vh;
+  .el-dialog__header {
+    padding: 10px;
+    line-height: 40px;
+    height: 40px;
+    border-bottom: 1px solid #ddd;
+    .el-dialog__headerbtn {
+      top: 20px;
+    }
+  }
+  .el-dialog__body {
+    flex: 1;
+    height: 0;
+    overflow: auto;
+  }
+  .el-dialog__footer {
+    text-align: center;
+    border-top: 1px solid #ddd;
+    padding: 10px 0;
+    background-color: #E5ECF0;
+  }
+}

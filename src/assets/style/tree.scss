@@ -1,0 +1,21 @@
+.tree-header {
+  font-size: 14px;
+  font-weight: bold;
+  color: #696a66;
+  background-color: #f5f5f7;
+  padding: 15px 0;
+}
+.el-tree-node__content {
+  height: 55px;
+  line-height: 55px;
+
+  .custom-tree-node {
+    width: 100%;
+  }
+  .el-tree-node__expand-icon {
+    transform: rotate(0deg) scale(1.5);
+  }
+  .el-tree-node__expand-icon.expanded {
+    transform: rotate(90deg) scale(1.5);
+  }
+}

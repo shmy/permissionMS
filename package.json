@@ -1,0 +1,42 @@
+{
+  "name": "permission-ms",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "vue-cli-service serve --open --mode development",
+    "build": "vue-cli-service build --mode production && node minifier.js",
+    "lint": "vue-cli-service lint"
+  },
+  "dependencies": {
+    "@d2-projects/d2-crud": "^1.2.0",
+    "axios": "^0.18.0",
+    "dayjs": "^1.7.7",
+    "element-ui": "^2.4.8",
+    "flex.css": "^1.1.7",
+    "js-cookie": "^2.2.0",
+    "localforage": "^1.7.2",
+    "lodash": "^4.17.11",
+    "nprogress": "^0.2.0",
+    "screenfull": "^3.3.3",
+    "vue": "^2.5.17",
+    "vue-class-component": "^6.0.0",
+    "vue-property-decorator": "^7.0.0",
+    "vue-router": "^3.0.1",
+    "vuex": "^3.0.1",
+    "vuex-class": "^0.3.1"
+  },
+  "devDependencies": {
+    "@types/lodash": "^4.14.117",
+    "@vue/cli-plugin-babel": "^3.0.5",
+    "@vue/cli-plugin-typescript": "^3.0.5",
+    "@vue/cli-service": "^3.0.5",
+    "babel-plugin-component": "^1.1.1",
+    "html-minifier": "^3.5.21",
+    "mockjs": "^1.0.1-beta3",
+    "node-sass": "^4.9.0",
+    "sass-loader": "^7.0.1",
+    "text-loader": "^0.0.1",
+    "typescript": "^3.0.0",
+    "vue-template-compiler": "^2.5.17"
+  }
+}

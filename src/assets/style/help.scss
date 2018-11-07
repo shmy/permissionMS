@@ -1,0 +1,36 @@
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.no-margin {
+  margin: 0 !important;
+}
+.no-padding {
+  padding: 0 !important;
+}
+.bg-white {
+  background-color: #fff !important;
+}
+.padding-10 {
+  padding: 10px !important;
+  box-sizing: border-box;
+}
+.padding-20 {
+  padding: 20px !important;
+  box-sizing: border-box;
+}
+.relative {
+  position: relative;
+}
+.absolute {
+  position: absolute;
+}
+.absolute.absolute-full {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}

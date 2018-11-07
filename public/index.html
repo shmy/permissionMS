@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="<%= BASE_URL %>favicon.ico">
+    <title>加载中...|<%= VUE_APP_SITE_NAME %></title>
+    <script>
+      window.__SITE_CONFIG = {
+        NAME: '<%= VUE_APP_SITE_NAME %>',
+        VERSION: '<%= VUE_APP_SITE_VERSION %>',
+        BUILD_AT: '<%= new Date().toLocaleString() %>',
+        SUPPORT_NAME: '<%= VUE_APP_SITE_SUPPORT_NAME %>',
+        SUPPORT_URL: '<%= VUE_APP_SITE_SUPPORT_URL %>',
+        SETTINGS: {
+          BASE_URL: '<%= BASE_URL %>',
+          ICON_ENGINE: '<%= VUE_APP_ICON_ENGINE %>',
+          MODULE_NAME_REGEXP: new RegExp('<%= VUE_APP_MODULE_NAME_REGEXP %>'),
+          ROUTER_MODE: '<%= VUE_APP_ROUTER_MODE %>',
+          API_URI: '<%= VUE_APP_API_URI %>',
+        }
+      };
+    </script>
+    <!-- 将必要的css先打到页面上 -->
+    <style>
+    <%= require('!text-loader!../node_modules/element-ui/lib/theme-chalk/reset.css') %>
+    <%= require('!text-loader!../node_modules/nprogress/nprogress.css') %>
+    <%= require('!text-loader!../node_modules/flex.css/dist/flex.css') %>
+    <%= require('!text-loader!@/assets/style/reset.css') %>
+    </style>
+  </head>
+  <body>
+    <noscript>
+      <strong>
+        <h1 style="text-align:center">抱歉！您必须 <a href="https://www.baidu.com/s?wd=%E5%BC%80%E5%90%AFjavascript" target="_blank">开启JavaScript</a> 才能够使用 <%= VUE_APP_SITE_NAME %></h1>
+      </strong>
+    </noscript>
+    <div id="app">
+      <div class="flash-screen-loading" flex="dir:left main:center cross:center">
+        <div>
+            <img src="<%= BASE_URL %>images/status.gif" alt="">
+            <div>正在加载中, 请稍后...</div>
+        </div>
+      </div>
+    </div>
+    <!-- built files will be auto injected -->
+  </body>
+</html>
