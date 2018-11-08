@@ -21,13 +21,36 @@
                :options="options" />
 
       <div flex="dir:left">
-        <el-button size="small"
-                   :disabled="!selected.length"
-                   @click="handleRemove()"
-                   type="danger">
-          <i class="fa fa-remove"></i>
-          &nbsp;&nbsp;删除{{ selected.length ? ` (${selected.length}条)` : ''}}
-        </el-button>
+        <div>
+          <el-button size="small"
+                     :disabled="!selected.length"
+                     @click="handleRemove()"
+                     type="danger">
+            <i class="fa fa-remove"></i>
+            &nbsp;&nbsp;删除{{ selected.length ? ` (${selected.length}条)` : ''}}
+          </el-button>
+          <el-dropdown @command="cmd => handleExport(cmd)">
+            <el-button size="small"
+                       :disabled="!selected.length"
+                       style="margin-left: 10px"
+                       type="primary">
+              <i class="fa fa-save"></i>
+              &nbsp;&nbsp;导出数据{{ selected.length ? ` (${selected.length}条)` : ''}}
+              <i class="el-icon-arrow-down el-icon--right"></i>
+            </el-button>
+            <el-dropdown-menu slot="dropdown">
+              <el-dropdown-item command="xlsx"
+                                :disabled="!selected.length">导出到 excel</el-dropdown-item>
+              <el-dropdown-item command="html"
+                                :disabled="!selected.length">导出到 html</el-dropdown-item>
+              <el-dropdown-item command="csv"
+                                :disabled="!selected.length">导出到 csv</el-dropdown-item>
+              <el-dropdown-item command="txt"
+                                :disabled="!selected.length">导出到 txt</el-dropdown-item>
+            </el-dropdown-menu>
+          </el-dropdown>
+        </div>
+
         <el-pagination flex-box="1"
                        @size-change="handleSizeChange($event)"
                        @current-change="handleCurrentChange($event)"
@@ -41,11 +64,14 @@
   </div>
 </template>
 <script>
+import jsonExport from "@/libs/json-export";
 import TablePagingMixin from "@/mixin/table-paging";
 import userCreate from "@/components/form-dialog/user-create";
 import userChangePwd from "@/components/form-dialog/user-change-pwd";
 import cloneDeep from "lodash/cloneDeep";
+import { exportUserColumns } from "@/libs/columns";
 import { formatTimeStamp } from "@/libs/util";
+
 export default {
   mixins: [TablePagingMixin],
   data() {
@@ -144,13 +170,21 @@ export default {
       this.$refs.userCreateDialog.open(row, "编辑", "edit");
     },
     handleRowChangePwd(id) {
-      this.$refs.userChangePwdDialog.open({ id, });
+      this.$refs.userChangePwdDialog.open({ id });
     },
     handleOpenAddDialog() {
       this.$refs.userCreateDialog.open();
     },
     handleSelectionChange(e) {
       this.selected = e.map(item => item.id);
+    },
+    handleExport(cmd) {
+      const data = this.data.filter(item => {
+        return this.selected.indexOf(item.id) !== -1;
+      });
+      if (data.length) {
+        jsonExport(exportUserColumns, data, `导出数据(${data.length})条`, cmd);
+      }
     },
     async fetch() {
       const params = {
