@@ -120,29 +120,18 @@
       border: $theme_tabs_border;
       .el-tabs__item {
         margin-left: $theme_tab_item_spacing;
+        margin-bottom: -3px;
         border-left-color: $theme_tab_item_border_color;
         color: $theme_tab_item_color;
-
+        background-color: $theme_tab_item_background_color;
         position: relative;
-        &::before{
-          content: ''; /*用伪元素来生成一个矩形*/
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          left: 0;
-          z-index: -1;
-          background-color: $theme_tab_item_background_color;
-          border-bottom: none;
-          border-radius: 3px 3px 0 0;
-          transform: perspective(20px) rotateX(10deg);
-          // transform-origin: left ;
-        }
+        border-top-left-radius: $theme_tab_item_border_radius;
+        border-top-right-radius: $theme_tab_item_border_radius;
         &:first-child {
-          margin-left: 15px;
+          margin-left: 0px;
         }
         &:not(.is-active):first-child {
-          margin-left: 11px;
+          margin-left: 0px;
         }
         
         &:hover {
@@ -167,10 +156,7 @@
         border-bottom: none;
         z-index: 1;
         color: $theme_tab_item_actived_color;
-        &::before {
-          background-color: $theme_content_background_color;
-
-        }
+        background-color: $theme_content_background_color;
       }
       .el-tabs__nav {
         border: $theme_tabs_border;

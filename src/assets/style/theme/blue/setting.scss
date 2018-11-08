@@ -43,7 +43,9 @@ $theme_tab_item_color: #ccc;
 $theme_tab_item_hover_color: #fff;
 $theme_tab_item_actived_color: #163D6B;
 // tab-item之间的间距
-$theme_tab_item_spacing: 0;
+$theme_tab_item_spacing: 7px;
+// tab-item左上和右上的圆角
+$theme_tab_item_border_radius: 3px;
 // tab-item边框颜色
 $theme_tab_item_border_color: transparent;
 // tabs dropdown 距离右边
