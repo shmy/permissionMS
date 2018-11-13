@@ -1,24 +1,41 @@
 <template>
   <div class="victor_login_page relative"
-      ref="container"
-      flex="dir:left main:center cross:center">
-    <div ref="output" class="anit_out absolute absolute-full"></div>
-    <el-form class="login_form"
-             label-width="55px">
+       ref="container"
+       flex="dir:left main:center cross:center">
+    <div ref="output"
+         class="anit_out absolute absolute-full"></div>
+    <el-form class="login_form">
       <h3 class="text-center">登录</h3>
-      <el-form-item label="用户名">
-        <el-input size="small"
-                  placeholder="请输入用户名"
-                  :disabled="inTheSubmission || redirecting"
-                  v-model="theForm.login"></el-input>
+      <el-form-item>
+        <div flex="dir:left">
+          <el-select size="small"
+                     style="width: 120px; margin-right: 10px"
+                     v-model="loginType">
+            <el-option v-for="item of loginTypes"
+                       :value="item.value"
+                       :label="item.label"
+                       :key="item.value">
+            </el-option>
+          </el-select>
+          <el-input flex-box="1"
+                    size="small"
+                    :placeholder="`请输入${loginType === 'login' ? '用户名' : '手机号'}`"
+                    :disabled="inTheSubmission || redirecting"
+                    v-model="theForm.login"></el-input>
+        </div>
+
       </el-form-item>
-      <el-form-item label="密码">
-        <el-input size="small"
-                  placeholder="请输入密码"
-                  type="password"
-                  @keyup.enter.native="handleLoginSubmit()"
-                  :disabled="inTheSubmission || redirecting"
-                  v-model="theForm.password"></el-input>
+      <el-form-item>
+        <div flex="dir:left">
+          <div style="width: 60px;margin-right: 10px">密码：</div>
+          <el-input size="small"
+                    flex-box="1"
+                    placeholder="请输入密码"
+                    type="password"
+                    @keyup.enter.native="handleLoginSubmit()"
+                    :disabled="inTheSubmission || redirecting"
+                    v-model="theForm.password"></el-input>
+        </div>
       </el-form-item>
       <el-form-item class="text-center"
                     label-width="0px">
@@ -42,9 +59,14 @@ import Victor from "@/libs/victor.js";
   name: "name",
   components: {
     // todo
-  },
+  }
 })
 export default class extends Vue {
+  loginTypes = [
+    { label: "用户名", value: "login" },
+    { label: "手机号", value: "phone" }
+  ];
+  loginType = "login";
   theForm = {
     login: "admin",
     password: "123456"
@@ -62,7 +84,11 @@ export default class extends Vue {
   }
   async handleLoginSubmit() {
     this.inTheSubmission = true;
-    const [ data, err, res ] = await this.$http.post("/login", this.theForm);
+    const body: any = {
+      password: this.theForm.password,
+    };
+    body[this.loginType] = this.theForm.login;
+    const [data, err, res] = await this.$http.post("/login", body);
     this.inTheSubmission = false;
     if (err !== null) {
       // if err
@@ -93,10 +119,10 @@ export default class extends Vue {
   }
   .login_form {
     background-color: #fff;
-    opacity: .9;
+    opacity: 0.9;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: 1px 0 5px rgba(0, 0, 0, .1);
+    box-shadow: 1px 0 5px rgba(0, 0, 0, 0.1);
     position: relative;
     z-index: 2;
   }

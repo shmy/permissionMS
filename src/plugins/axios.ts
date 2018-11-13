@@ -64,8 +64,15 @@ instance.interceptors.response.use(
     // 只将请求结果的data字段返回
     return Promise.resolve([res.data, null, response]);
   },
-  (error: AxiosError): any => {
+  async (error: AxiosError): Promise<any> => {
     nprogress.done();
+    if (error.response) {
+      // 401 需要重新登陆
+      if (error.response.status === 401) {
+        await db.removeItem("token");
+        window.location.reload();
+      }
+    }
     return Promise.resolve([null, createError(error), error.response]);
   },
 );

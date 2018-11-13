@@ -93,12 +93,14 @@ export default {
                   </el-button>
                   <el-button
                     type="danger"
+                    disabled={row.children !== undefined}
                     onClick={() => this.handleRowDel(row.id, row.name)}
                     size="mini"
                   >
                     <i class="fa fa-remove" />
                   </el-button>
                   <el-button
+                    disabled={row.type === 2}
                     onClick={() => this.handleRowAdd(row.id, row.name)}
                     type="primary"
                     size="mini"
