@@ -3,7 +3,10 @@
   <div class="layout_container"
        flex="dir:left">
     <krSetting ref="setting" />
-    <profileEdit @edit="handleProfileSubmit($event)" ref="profile" />
+    <profileEdit @edit="handleProfileSubmit($event)"
+                 ref="profile" />
+    <profilePassword @edit="handleProfilePasswordSubmit($event)"
+                     ref="profilePassword" />
     <!-- 左侧 -->
     <kr-aside class="layout_aside"
               ref="aside">
@@ -83,7 +86,9 @@ import KrDropdown from "@/layout/header-aside/dropdown/index.vue";
 import krToolBar from "@/layout/header-aside/tool-bar/index.vue";
 import krSetting from "@/layout/header-aside/setting/index.vue";
 import CustomToolbar from "@/layout/custom/custom-toolbar/index.vue";
+// @ts-ignore
 import profileEdit from "@/components/form-dialog/profile-edit/index.vue";
+import profilePassword from "@/components/form-dialog/profile-password/index.vue";
 
 @Component({
   name: "layout",
@@ -96,6 +101,7 @@ import profileEdit from "@/components/form-dialog/profile-edit/index.vue";
     krSetting,
     CustomToolbar,
     profileEdit,
+    profilePassword
   }
 })
 export default class extends Mixins(PageMixin) {
@@ -103,7 +109,10 @@ export default class extends Mixins(PageMixin) {
   "$refs": {
     aside: KrAside;
     setting: krSetting;
+    // @ts-ignore
     profile: profileEdit;
+    // @ts-ignore
+    profilePassword: profilePassword;
   };
   @State(state => state.krAdmin.page.keepAlive)
   keepAlive!: string[];
@@ -126,6 +135,9 @@ export default class extends Mixins(PageMixin) {
   }
   handleProfileChooseed(command: ProfileOptions) {
     switch (command) {
+      case ProfileOptions.password:
+        this.$refs.profilePassword.open();
+        break;
       case ProfileOptions.profile:
         this.$refs.profile.open();
         break;
@@ -163,18 +175,35 @@ export default class extends Mixins(PageMixin) {
         break;
     }
   }
-  async handleProfileSubmit({ field, cancel, close } : any) {
-    const [data, err] = await this.$http.put(
-        "/user/getOneself",
-        field
-      );
-      if (err) {
-        err.showAlert();
-        cancel();
-        return;
-      }
-      this.$message.success("修改成功！");
-      close();
+  async handleProfileSubmit({ field, cancel, close }: any) {
+    const [data, err] = await this.$http.put("/user/getOneself", field);
+    if (err) {
+      err.showAlert();
+      cancel();
+      return;
+    }
+    await db.setItem("token", data);
+    this.$message.success("修改成功！");
+    close();
+    this.syncProfile();
+  }
+  async syncProfile() {
+    const [data, err] = await this.$http.get("/user/getOneself");
+    if (err) {
+      err.showAlert();
+      return;
+    }
+    this.$store.commit("krAdmin/user/setUser", data);
+  }
+  async handleProfilePasswordSubmit({ field, cancel, close }: any) {
+    const [data, err] = await this.$http.put("/user/updateOneselfPsw", field);
+    if (err) {
+      err.showAlert();
+      cancel();
+      return;
+    }
+    this.$message.success("修改成功！");
+    close();
   }
 }
 </script>

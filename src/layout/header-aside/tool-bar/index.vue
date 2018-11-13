@@ -24,6 +24,7 @@
       </div>
       <el-dropdown-menu slot="dropdown">
         <el-dropdown-item :command="profileOptions.profile">修改资料</el-dropdown-item>
+        <el-dropdown-item :command="profileOptions.password">修改密码</el-dropdown-item>
         <el-dropdown-item :command="profileOptions.personality">个性设置</el-dropdown-item>
         <el-dropdown-item :command="profileOptions.clearCache">清除缓存</el-dropdown-item>
         <el-dropdown-item :command="profileOptions.logOut">退出登录</el-dropdown-item>
@@ -45,6 +46,7 @@ const screenfull = _screenfull as any;
 export default class extends Vue {
   isFullScreen = false;
   profileOptions = {
+    password: ProfileOptions.password,
     profile: ProfileOptions.profile,
     personality: ProfileOptions.personality,
     clearCache: ProfileOptions.clearCache,
