@@ -1,5 +1,8 @@
 import { http } from "@/plugins/axios";
 import { db } from "@/libs/util";
+
+// 获取用户信息
+export const getProfile = () => http.get("/user/getOneself");
 // 初始化状态
 export const getBaseInfo = () => {
   return new Promise(async (resolve, reject) => {
@@ -11,7 +14,7 @@ export const getBaseInfo = () => {
     // @ts-ignore
     const [userInfo, treeInfo, systemInfo] = await Promise.all([
       // 获取用户信息
-      http.get("/user/getOneself"),
+      getProfile(),
       // 获取菜单信息
       http.get("/auth/tree"),
       // 获取系统信息

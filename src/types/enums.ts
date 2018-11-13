@@ -6,6 +6,7 @@ export enum DropdownType {
   closeAll,
 }
 export enum ProfileOptions {
+  profile,
   personality,
   clearCache,
   logOut,

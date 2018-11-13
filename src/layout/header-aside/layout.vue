@@ -3,6 +3,7 @@
   <div class="layout_container"
        flex="dir:left">
     <krSetting ref="setting" />
+    <profileEdit @edit="handleProfileSubmit($event)" ref="profile" />
     <!-- 左侧 -->
     <kr-aside class="layout_aside"
               ref="aside">
@@ -82,6 +83,7 @@ import KrDropdown from "@/layout/header-aside/dropdown/index.vue";
 import krToolBar from "@/layout/header-aside/tool-bar/index.vue";
 import krSetting from "@/layout/header-aside/setting/index.vue";
 import CustomToolbar from "@/layout/custom/custom-toolbar/index.vue";
+import profileEdit from "@/components/form-dialog/profile-edit/index.vue";
 
 @Component({
   name: "layout",
@@ -92,7 +94,8 @@ import CustomToolbar from "@/layout/custom/custom-toolbar/index.vue";
     KrDropdown,
     krToolBar,
     krSetting,
-    CustomToolbar
+    CustomToolbar,
+    profileEdit,
   }
 })
 export default class extends Mixins(PageMixin) {
@@ -100,6 +103,7 @@ export default class extends Mixins(PageMixin) {
   "$refs": {
     aside: KrAside;
     setting: krSetting;
+    profile: profileEdit;
   };
   @State(state => state.krAdmin.page.keepAlive)
   keepAlive!: string[];
@@ -122,6 +126,9 @@ export default class extends Mixins(PageMixin) {
   }
   handleProfileChooseed(command: ProfileOptions) {
     switch (command) {
+      case ProfileOptions.profile:
+        this.$refs.profile.open();
+        break;
       case ProfileOptions.personality:
         this.$refs.setting.open();
         break;
@@ -155,6 +162,19 @@ export default class extends Mixins(PageMixin) {
       default:
         break;
     }
+  }
+  async handleProfileSubmit({ field, cancel, close } : any) {
+    const [data, err] = await this.$http.put(
+        "/user/getOneself",
+        field
+      );
+      if (err) {
+        err.showAlert();
+        cancel();
+        return;
+      }
+      this.$message.success("修改成功！");
+      close();
   }
 }
 </script>
