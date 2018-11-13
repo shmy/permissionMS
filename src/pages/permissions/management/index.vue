@@ -84,6 +84,7 @@ export default {
                 <span>
                   <el-button
                     type="success"
+                    plain
                     onClick={() =>
                       this.handleRowEdit(cleaningData(cloneDeep(row)))
                     }
@@ -93,6 +94,7 @@ export default {
                   </el-button>
                   <el-button
                     type="danger"
+                    plain
                     disabled={row.children !== undefined}
                     onClick={() => this.handleRowDel(row.id, row.name)}
                     size="mini"
@@ -103,6 +105,7 @@ export default {
                     disabled={row.type === 2}
                     onClick={() => this.handleRowAdd(row.id, row.name)}
                     type="primary"
+                    plain
                     size="mini"
                   >
                     <i class="fa fa-plus" />

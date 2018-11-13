@@ -4,6 +4,8 @@
                    @add="handleAddSubmit($event)"
                    @edit="handleEditSubmit($event)"
                    ref="systemCreateDialog" />
+    <system-distribution @edit="handleDistributionSubmit($event)"
+                         ref="systemDistribution" />
     <div class="bg-white">
       <div class="text-right padding-10">
         <el-button @click="handleOpenAddDialog()"
@@ -22,6 +24,7 @@
 </template>
 <script>
 import systemCreate from "@/components/form-dialog/system-create";
+import systemDistribution from "@/components/form-dialog/system-distribution";
 import cloneDeep from "lodash/cloneDeep";
 import { formatTimeStamp, recursion } from "@/libs/util";
 const cleaningData = row => {
@@ -73,7 +76,7 @@ export default {
         {
           label: "操作",
           fixed: "right",
-          width: "80px",
+          width: "120px",
           component: {
             render: (h, row) => {
               return (
@@ -82,9 +85,19 @@ export default {
                     size="mini"
                     type="primary"
                     plain
-                    on-click={e => this.handleRowEdit(cleaningData(cloneDeep(row)))}
+                    on-click={e =>
+                      this.handleRowEdit(cleaningData(cloneDeep(row)))
+                    }
                   >
                     <i class="fa fa-edit" />
+                  </el-button>
+                  <el-button
+                    size="mini"
+                    type="success"
+                    plain
+                    on-click={e => this.handleRowDistribution(row.id)}
+                  >
+                    <i class="fa fa-sliders" />
                   </el-button>
                 </span>
               );
@@ -97,7 +110,8 @@ export default {
     };
   },
   components: {
-    systemCreate
+    systemCreate,
+    systemDistribution
   },
   methods: {
     handleRowEdit(row) {
@@ -146,6 +160,19 @@ export default {
       this.$message.success("编辑成功！");
       close();
       this.fetch();
+    },
+    async handleRowDistribution(id) {
+      this.$refs.systemDistribution.open(id);
+    },
+    async handleDistributionSubmit({ field, cancel, close }) {
+      const [data, err] = await this.$http.put("/system/defaultAuth", field);
+      if (err) {
+        err.showAlert();
+        cancel();
+        return;
+      }
+      close();
+      this.$message.success("分配完毕");
     }
   },
   created() {

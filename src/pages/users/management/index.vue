@@ -5,6 +5,8 @@
                  @edit="handleEditSubmit($event)" />
     <user-change-pwd ref="userChangePwdDialog"
                      @submit="handleRestPwd($event)" />
+    <user-distribution @edit="handleDistributionSubmit($event)"
+                       ref="userDistribution" />
     <div class="bg-white padding-10">
       <div class="text-right">
         <el-button @click="handleOpenAddDialog()"
@@ -68,6 +70,7 @@ import jsonExport from "@/libs/json-export";
 import TablePagingMixin from "@/mixin/table-paging";
 import userCreate from "@/components/form-dialog/user-create";
 import userChangePwd from "@/components/form-dialog/user-change-pwd";
+import userDistribution from "@/components/form-dialog/user-distribution";
 import cloneDeep from "lodash/cloneDeep";
 import { exportUserColumns } from "@/libs/columns";
 import { formatTimeStamp } from "@/libs/util";
@@ -123,7 +126,7 @@ export default {
         },
         {
           title: "操作",
-          width: "180",
+          width: "170",
           fixed: "right",
           component: {
             render: (h, row) => {
@@ -136,15 +139,22 @@ export default {
                     onClick={() => this.handleRowEdit(cloneDeep(row))}
                   >
                     <i class="fa fa-edit" />
-                    &nbsp;&nbsp;编辑
                   </el-button>
                   <el-button
                     size="small"
                     type="info"
+                    plain
                     onClick={() => this.handleRowChangePwd(row.id)}
                   >
                     <i class="fa fa-lock" />
-                    &nbsp;&nbsp;改密
+                  </el-button>
+                  <el-button
+                    size="small"
+                    type="success"
+                    plain
+                    onClick={() => this.handleRowDistribution(row.id)}
+                  >
+                    <i class="fa fa-sliders" />
                   </el-button>
                 </span>
               );
@@ -163,7 +173,8 @@ export default {
   },
   components: {
     userCreate,
-    userChangePwd
+    userChangePwd,
+    userDistribution
   },
   methods: {
     handleRowEdit(row) {
@@ -171,6 +182,9 @@ export default {
     },
     handleRowChangePwd(id) {
       this.$refs.userChangePwdDialog.open({ id });
+    },
+    handleRowDistribution(id) {
+      this.$refs.userDistribution.open(id);
     },
     handleOpenAddDialog() {
       this.$refs.userCreateDialog.open();
@@ -256,6 +270,16 @@ export default {
         .catch(() => {
           //
         });
+    },
+    async handleDistributionSubmit({ field, cancel, close }) {
+      const [data, err] = await this.$http.put("/user/authUpdate", field);
+      if (err) {
+        err.showAlert();
+        cancel();
+        return;
+      }
+      close();
+      this.$message.success("分配完毕");
     }
   },
   created() {

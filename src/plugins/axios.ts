@@ -71,6 +71,7 @@ instance.interceptors.response.use(
       if (error.response.status === 401) {
         await db.removeItem("token");
         window.location.reload();
+        return [null, null];
       }
     }
     return Promise.resolve([null, createError(error), error.response]);
