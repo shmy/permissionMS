@@ -8,7 +8,25 @@
     <user-distribution @edit="handleDistributionSubmit($event)"
                        ref="userDistribution" />
     <div class="bg-white padding-10">
+
       <div class="text-right">
+        <el-select style="width: 100px; margin-right: 10px"
+                     v-model="searchType">
+            <el-option v-for="item of searchTypes"
+                       :value="item.value"
+                       :label="item.label"
+                       :key="item.value">
+            </el-option>
+          </el-select>
+        <el-input style="width: 240px; margin-right: 10px;"
+                  :placeholder="`请输入${searchType === 'name' ? '姓名' : '手机号'}进行搜索`"
+                  v-model="serarchValue"
+                  @keyup.enter.native="fetch()"></el-input>
+        <el-button @click="fetch()"
+                   type="success">
+          <i class="fa fa-search"></i>
+          搜索
+        </el-button>
         <el-button @click="handleOpenAddDialog()"
                    type="primary">
           <i class="fa fa-plus"></i>
@@ -168,7 +186,13 @@ export default {
         stripe: true,
         border: true,
         sortable: true
-      }
+      },
+      serarchValue: "",
+      searchTypes: [
+        { label: "姓名", value: "name" },
+        { label: "手机号", value: "phone" }
+      ],
+      searchType: "name"
     };
   },
   components: {
@@ -203,8 +227,9 @@ export default {
     async fetch() {
       const params = {
         offset: (this.paging.page - 1) * this.paging.pagesize,
-        limit: this.paging.pagesize
+        limit: this.paging.pagesize,
       };
+      params[this.searchType] = this.serarchValue;
       const [data, err] = await this.$http.get("/user", {
         params
       });
