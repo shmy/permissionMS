@@ -24,6 +24,14 @@ export default (dynamicRoutes: any) => {
         },
       },
       {
+        name: "forbidden",
+        path: "*",
+        component: load("error-403/index"),
+        meta: {
+          title: "无权访问",
+        },
+      },
+      {
         name: "not-found",
         path: "*",
         component: load("error-404/index"),

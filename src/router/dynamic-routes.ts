@@ -1,31 +1,31 @@
 import { maps, routes } from "@/menu/map";
 import { recursion } from "@/libs/util";
 import layoutHeaderAside from "@/layout/header-aside/layout.vue";
-import err from "@/pages/error-404/index.vue";
+// import err from "@/pages/error-404/index.vue";
 
 // 根据ids生成路由结构
 export const generateDynamicRouting = (allowIds: number[]) => {
-  let data = routes;
-  if (allowIds.length !== 0) {
-    data = routes.filter(item => {
+  let frameInChildren: any = [];
+  if (allowIds.length > 0) {
+    const data = routes.filter(item => {
       // tslint:disable-next-line:no-bitwise
       return ~allowIds.indexOf(item.id);
     });
+    frameInChildren = data.map(item => {
+      if (item.path) {
+        const generalName = item.path.replace(/\//g, "_").replace(/^_/, "");
+        item.name = generalName;
+        // @ts-ignore
+        item.component = item.component(generalName);
+      }
+      return item;
+    });
   }
-  const frameInChildren = data.map(item => {
-    if (item.path) {
-      const generalName = item.path.replace(/\//g, "_").replace(/^_/, "");
-      item.name = generalName;
-      // @ts-ignore
-      item.component = item.component(generalName);
-    }
-    return item;
-  });
   return [
     {
       path: "/",
       redirect: {
-        name: frameInChildren.length > 0 ? frameInChildren[0].name : "not-found",
+        name: frameInChildren.length > 0 ? frameInChildren[0].name : "forbidden",
       },
       component: layoutHeaderAside,
       children: frameInChildren,
@@ -35,8 +35,8 @@ export const generateDynamicRouting = (allowIds: number[]) => {
 
 // 根据ids生成菜单结构
 export const generateDynamicMenu = (allowIds: number[]) => {
-  let data = maps;
-  if (allowIds.length !== 0) {
+  let data: any = [];
+  if (allowIds.length > 0) {
     data = maps.filter(item => {
       // tslint:disable-next-line:no-bitwise
       return ~allowIds.indexOf(item.id);

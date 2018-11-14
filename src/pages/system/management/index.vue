@@ -126,13 +126,22 @@ export default {
         err.showAlert();
         return;
       }
-      this.data = recursion(data, "id", "pid", 0);
+      // 找到最顶级的pid
+      let minPid = 100;
+      data.forEach(item => {
+        if (item.pid < minPid) {
+          minPid = item.pid;
+        }
+      });
+      this.data = recursion(data, "id", "pid", minPid);
       const parents = [];
       this.data.forEach(item => {
-        parents.push({
-          label: item.name,
-          value: item.id
-        });
+        if (item.pid === 0) {
+          parents.push({
+            label: item.name,
+            value: item.id
+          });
+        }
       });
       this.parents = parents;
     },

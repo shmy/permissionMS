@@ -66,7 +66,8 @@ export default {
         return;
       }
       this.loading = true;
-      const field = this.$refs.tree.getCheckedKeys();
+      // 包含半选节点
+      const field = this.$refs.tree.getCheckedNodes(false, true).map(item => item.id);
       this.$emit("edit", {
         field: {
           userid: this.id,

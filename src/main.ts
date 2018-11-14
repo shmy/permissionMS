@@ -51,7 +51,9 @@ const bootstrap = async () => {
     router,
     render: (h) => h(App),
     created() {
-      this.$store.dispatch("krAdmin/page/init", frameInRoutes[0].children);
+      if (frameInRoutes.length > 0) {
+        this.$store.dispatch("krAdmin/page/init", frameInRoutes[0].children);
+      }
       // this.$store.commit("krAdmin/menu/setHeader", menuHeader);
       this.$store.commit("krAdmin/menu/setAside", menuAside);
       this.$store.commit("krAdmin/theme/apply");
