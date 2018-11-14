@@ -25,7 +25,7 @@ export const generateDynamicRouting = (allowIds: number[]) => {
     {
       path: "/",
       redirect: {
-        name: frameInChildren.length > 0 ? frameInChildren[0].name : "forbidden",
+        name: frameInChildren.length > 0 ? frameInChildren[0].name : "welcome",
       },
       component: layoutHeaderAside,
       children: frameInChildren,

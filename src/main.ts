@@ -51,6 +51,11 @@ const bootstrap = async () => {
     router,
     render: (h) => h(App),
     created() {
+      // 未登录
+      if (!baseInfo) {
+        this.$router.replace({ name: "login" });
+        return;
+      }
       if (frameInRoutes.length > 0) {
         this.$store.dispatch("krAdmin/page/init", frameInRoutes[0].children);
       }
