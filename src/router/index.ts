@@ -36,7 +36,7 @@ export default (dynamicRoutes: any) => {
       },
       {
         name: "forbidden",
-        path: "*",
+        path: "/error-forbidden",
         component: load("error-403/index"),
         meta: {
           title: "无权访问",

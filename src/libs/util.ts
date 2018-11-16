@@ -87,7 +87,7 @@ export const getDepthPath = (o: any): string => {
     if (!o.children[0].path) { return getDepthPath(o.children[0]); }
     return o.children[0].path;
   }
-  return "/error-not-found";
+  return "/error-forbidden";
 };
 /**
  * 随机指定长度字符串

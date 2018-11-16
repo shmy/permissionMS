@@ -6,6 +6,8 @@
                    ref="systemCreateDialog" />
     <system-distribution @edit="handleDistributionSubmit($event)"
                          ref="systemDistribution" />
+    <system-distribution-user @edit="handleDistributionUserSubmit($event)"
+                              ref="systemDistributionUser" />
     <div class="bg-white">
       <div class="text-right padding-10">
         <el-button @click="handleOpenAddDialog()"
@@ -25,6 +27,7 @@
 <script>
 import systemCreate from "@/components/form-dialog/system-create";
 import systemDistribution from "@/components/form-dialog/system-distribution";
+import systemDistributionUser from "@/components/form-dialog/system-distribution-user";
 import cloneDeep from "lodash/cloneDeep";
 import { formatTimeStamp, recursion } from "@/libs/util";
 const cleaningData = row => {
@@ -76,7 +79,7 @@ export default {
         {
           label: "操作",
           fixed: "right",
-          width: "120px",
+          width: "180px",
           component: {
             render: (h, row) => {
               return (
@@ -90,6 +93,14 @@ export default {
                     }
                   >
                     <i class="fa fa-edit" />
+                  </el-button>
+                  <el-button
+                    size="mini"
+                    type="danger"
+                    plain
+                    on-click={e => this.handleRowDistributionUser(row.id)}
+                  >
+                    <i class="fa fa-user" />
                   </el-button>
                   <el-button
                     size="mini"
@@ -111,11 +122,18 @@ export default {
   },
   components: {
     systemCreate,
-    systemDistribution
+    systemDistribution,
+    systemDistributionUser
   },
   methods: {
     handleRowEdit(row) {
       this.$refs.systemCreateDialog.open(row, "编辑", "edit");
+    },
+    handleRowDistribution(id) {
+      this.$refs.systemDistribution.open(id);
+    },
+    handleRowDistributionUser(id) {
+      this.$refs.systemDistributionUser.open(id);
     },
     handleOpenAddDialog() {
       this.$refs.systemCreateDialog.open();
@@ -170,11 +188,18 @@ export default {
       close();
       this.fetch();
     },
-    async handleRowDistribution(id) {
-      this.$refs.systemDistribution.open(id);
-    },
     async handleDistributionSubmit({ field, cancel, close }) {
       const [data, err] = await this.$http.put("/system/defaultAuth", field);
+      if (err) {
+        err.showAlert();
+        cancel();
+        return;
+      }
+      close();
+      this.$message.success("分配完毕");
+    },
+    async handleDistributionUserSubmit({ field, cancel, close }) {
+      const [data, err] = await this.$http.post("/system/distributionAdmin", field);
       if (err) {
         err.showAlert();
         cancel();
