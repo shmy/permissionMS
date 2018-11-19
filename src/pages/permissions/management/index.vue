@@ -3,12 +3,19 @@
     <permissions-create @add="handleAddSubmit($event)"
                         @edit="handleEditSubmit($event)"
                         ref="permissionsCreateDialog" />
+    <permissions-complete-set @add="handleCompleteSetSubmit($event)"
+                              ref="permissionsCompleteSetDialog" />
     <div class="bg-white">
       <div class="text-right padding-10">
         <el-button @click="handleOpenAddDialog()"
                    type="primary">
           <i class="fa fa-plus"></i>
           新增顶级权限
+        </el-button>
+        <el-button @click="handleCreateCompleteSet()"
+                   type="success">
+          <i class="fa fa-plus"></i>
+          添加整套权限
         </el-button>
       </div>
       <div class="padding-10">
@@ -22,6 +29,7 @@
 </template>
 <script>
 import permissionsCreate from "@/components/form-dialog/permissions-create";
+import permissionsCompleteSet from "@/components/form-dialog/permissions-complete-set";
 import cloneDeep from "lodash/cloneDeep";
 import { formatTimeStamp, recursion } from "@/libs/util";
 const typeMap = ["目录", "菜单", "按钮"];
@@ -120,7 +128,8 @@ export default {
     };
   },
   components: {
-    permissionsCreate
+    permissionsCreate,
+    permissionsCompleteSet
   },
   created() {
     this.fetch();
@@ -170,6 +179,9 @@ export default {
         { label: "根目录", value: 0 }
       ]);
     },
+    handleCreateCompleteSet() {
+      this.$refs.permissionsCompleteSetDialog.open();
+    },
     async fetch() {
       const [data, err] = await this.$http.get("/auth");
       if (err) {
@@ -200,6 +212,27 @@ export default {
         return;
       }
       this.$message.success("编辑成功！");
+      close();
+      this.fetch();
+    },
+    async handleCompleteSetSubmit({ field, cancel, close }) {
+      let ret = {};
+      try {
+        ret = JSON.parse(field.text);
+      } catch (error) {
+        this.$alert("权限规则格式有误，请检查后重新编辑", {
+          type: "error"
+        });
+        cancel();
+        return;
+      }
+      const [data, err] = await this.$http.post("/auth/saveAll", ret);
+      if (err) {
+        err.showAlert();
+        cancel();
+        return;
+      }
+      this.$message.success("添加成功！");
       close();
       this.fetch();
     }
